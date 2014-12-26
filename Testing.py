@@ -3,6 +3,11 @@ __author__ = 'joefalkson'
 #using ystockquote library
 import ystockquote
 
+'''We have two methods, eval_stock (scores tickers) and store_ticker (takes a csv file of tickers and
+stores values into an array'''
+
+
+
 ##Function designed to evaluate a ticker
 def eval_stock(ticker):
     result = "Summary: "
@@ -30,19 +35,31 @@ def eval_stock(ticker):
     if float(ystockquote.get_eps(ticker))>.02*float(ystockquote.get_todays_high(ticker)):
         score+=1.5
 
-    result += " \n EPS: " + ystockquote.get_eps(ticker)
+    result += " \n EPS: " + ystockquote.get_eps(ticker) + " today's high is " + ystockquote.get_todays_high(ticker)
 
     result+= " \n , notes (if applicable)" + ystockquote.get_notes(ticker)
     return result, "Score is " + str(score)
 
 
+#tickers taken from http://investexcel.net/all-yahoo-finance-stock-tickers/
+##Here we store the tickers from a csv file into an array.
+def store_tickers(ticker_file):
+    tickers=[]
+    with open(ticker_file, "r") as my_file:
+        lines=my_file.readlines()
+
+    for line in lines:
+        #get rid of the new line syntax
+        line=line.strip("',/\n[]")
+        tickers.append(line)
+
+    return tickers
+
+print(store_tickers("tickers.csv"))
 
 
 
-
-
-
-print (eval_stock('DDD'))
+print (eval_stock('CSG'))
 
 print (type(float(ystockquote.get_todays_high('GOOG'))))
 
